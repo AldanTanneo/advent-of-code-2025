@@ -26,9 +26,9 @@ pub fn input_bytes(day: u8) -> Vec<u8> {
 }
 
 pub fn parse_dec<T: From<u8> + std::ops::Add<Output = T> + std::ops::Mul<Output = T>>(
-    s: &str,
+    s: impl AsRef<[u8]>,
 ) -> T {
-    s.bytes()
+    s.as_ref().into_iter()
         .fold(T::from(0), |acc, c| T::from(10) * acc + T::from(c & 0b1111))
 }
 
