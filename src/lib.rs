@@ -25,11 +25,18 @@ pub fn input_bytes(day: u8) -> Vec<u8> {
         .unwrap_or_else(|err| panic!("Could not read file for day {day}: {err}\n{err:?}"))
 }
 
+/// Convert an ascii decimal digit to its numeric value
+pub fn to_dec(byte: u8) -> u8 {
+    debug_assert!((b'0'..=b'9').contains(&byte));
+    byte & 0b1111
+}
+
+/// Convert an ascii decimal string to its numeric value
 pub fn parse_dec<T: From<u8> + std::ops::Add<Output = T> + std::ops::Mul<Output = T>>(
     s: impl AsRef<[u8]>,
 ) -> T {
     s.as_ref().into_iter()
-        .fold(T::from(0), |acc, c| T::from(10) * acc + T::from(c & 0b1111))
+        .fold(T::from(0), |acc, c| T::from(10) * acc + T::from(to_dec(*c)))
 }
 
 pub const fn gcd(mut u: u64, mut v: u64) -> u64 {
