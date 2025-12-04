@@ -35,7 +35,8 @@ pub fn to_dec(byte: u8) -> u8 {
 pub fn parse_dec<T: From<u8> + std::ops::Add<Output = T> + std::ops::Mul<Output = T>>(
     s: impl AsRef<[u8]>,
 ) -> T {
-    s.as_ref().into_iter()
+    s.as_ref()
+        .into_iter()
         .fold(T::from(0), |acc, c| T::from(10) * acc + T::from(to_dec(*c)))
 }
 
@@ -148,7 +149,7 @@ pub struct VecGrid {
 impl VecGrid {
     pub fn new(data: Vec<u8>) -> Self {
         let width = data.iter().position(|&b| b == b'\n').unwrap() + 1;
-        let height = data.len() / (width);
+        let height = data.len() / width;
 
         Self {
             data,
