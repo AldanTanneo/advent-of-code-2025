@@ -1,6 +1,6 @@
 #!/usr/bin/fish
 
-argparse --name=aoc-runner -N 1 -- $argv; or return
+argparse --name=aoc-runner -N 1 -X 1 -- $argv; or return
 
 set day (printf "day%02d" $argv[1])
 set day_file "./src/bin/$day"
