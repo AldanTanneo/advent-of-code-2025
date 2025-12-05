@@ -1,5 +1,6 @@
 use std::fmt::Write;
 use std::io::{BufRead, BufReader};
+use std::ops::RangeInclusive;
 use std::path::PathBuf;
 
 fn day_file(day: u8) -> PathBuf {
@@ -85,6 +86,18 @@ pub const fn extended_gcd(u: u64, v: u64) -> (u64, i64, i64) {
     }
 
     (r[0], s[0], t[0])
+}
+
+pub fn intersect(a: RangeInclusive<u64>, b: RangeInclusive<u64>) -> RangeInclusive<u64> {
+    *a.start().max(b.start())..=*a.end().min(b.end())
+}
+
+pub fn union(a: RangeInclusive<u64>, b: RangeInclusive<u64>) -> Option<RangeInclusive<u64>> {
+    if intersect(a.clone(), b.clone()).is_empty() {
+        None
+    } else {
+        Some(*a.start().min(b.start())..=*a.end().max(b.end()))
+    }
 }
 
 #[derive(Copy, Clone, Hash, PartialEq, Eq)]
