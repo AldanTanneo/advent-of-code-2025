@@ -1,4 +1,5 @@
 use std::fmt::Write;
+use std::fs;
 use std::io::{BufRead, BufReader};
 use std::ops::RangeInclusive;
 use std::path::PathBuf;
@@ -11,18 +12,21 @@ fn day_file(day: u8) -> PathBuf {
 }
 
 pub fn input_lines(day: u8) -> impl Iterator<Item = String> {
-    BufReader::new(std::fs::File::open(day_file(day)).unwrap())
-        .lines()
-        .map_while(Result::ok)
+    BufReader::new(
+        fs::File::open(day_file(day))
+            .unwrap_or_else(|err| panic!("Could not open file for day {day}: {err}\n{err:?}")),
+    )
+    .lines()
+    .map_while(Result::ok)
 }
 
 pub fn input_str(day: u8) -> String {
-    std::fs::read_to_string(day_file(day))
+    fs::read_to_string(day_file(day))
         .unwrap_or_else(|err| panic!("Could not read file for day {day}: {err}\n{err:?}"))
 }
 
 pub fn input_bytes(day: u8) -> Vec<u8> {
-    std::fs::read(day_file(day))
+    fs::read(day_file(day))
         .unwrap_or_else(|err| panic!("Could not read file for day {day}: {err}\n{err:?}"))
 }
 
@@ -88,15 +92,25 @@ pub const fn extended_gcd(u: u64, v: u64) -> (u64, i64, i64) {
     (r[0], s[0], t[0])
 }
 
-pub fn intersect(a: RangeInclusive<u64>, b: RangeInclusive<u64>) -> RangeInclusive<u64> {
-    *a.start().max(b.start())..=*a.end().min(b.end())
+pub fn intersects<T: Ord>(a: RangeInclusive<T>, b: RangeInclusive<T>) -> bool {
+    a.start() <= b.end() && b.start() <= a.end()
 }
 
-pub fn union(a: RangeInclusive<u64>, b: RangeInclusive<u64>) -> Option<RangeInclusive<u64>> {
-    if intersect(a.clone(), b.clone()).is_empty() {
-        None
+pub fn intersection<T: Ord + Clone>(
+    a: RangeInclusive<T>,
+    b: RangeInclusive<T>,
+) -> RangeInclusive<T> {
+    a.start().max(b.start()).clone()..=a.end().min(b.end()).clone()
+}
+
+pub fn union<T: Ord + Clone>(
+    a: RangeInclusive<T>,
+    b: RangeInclusive<T>,
+) -> Option<RangeInclusive<T>> {
+    if intersects(a.clone(), b.clone()) {
+        Some(a.start().min(b.start()).clone()..=a.end().max(b.end()).clone())
     } else {
-        Some(*a.start().min(b.start())..=*a.end().max(b.end()))
+        None
     }
 }
 

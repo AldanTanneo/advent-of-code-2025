@@ -22,7 +22,7 @@ fn main() {
                 let mul = (0..q).fold(0, |acc, _| acc * pow + 1);
                 let range = pow / 10..=pow - 1;
 
-                for n in aoc::intersect(lo.div_ceil(mul)..=hi / mul, range) {
+                for n in aoc::intersection(lo.div_ceil(mul)..=hi / mul, range) {
                     let res = n * mul;
                     if !duplicates.contains(&res) {
                         duplicates.insert(res);
