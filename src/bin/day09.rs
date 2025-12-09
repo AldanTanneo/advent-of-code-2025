@@ -39,7 +39,7 @@ fn main() {
             tiles
                 .get(i + 1..)
                 .unwrap_or_else(|| &[][..])
-                .into_iter()
+                .iter()
                 .map(|b| area(*a, *b))
         })
         .max()
@@ -52,7 +52,7 @@ fn main() {
             tiles
                 .get(i + 1..)
                 .unwrap_or_else(|| &[][..])
-                .into_iter()
+                .iter()
                 .filter_map(|b| {
                     if tiles
                         .iter()

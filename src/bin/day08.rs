@@ -26,7 +26,7 @@ fn main() {
             boxes
                 .get(i + 1..)
                 .unwrap_or(&[])
-                .into_iter()
+                .iter()
                 .map(move |b| (a, b))
         })
         .filter(|(a, b)| a != b)

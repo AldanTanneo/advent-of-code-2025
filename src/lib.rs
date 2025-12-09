@@ -32,7 +32,7 @@ pub fn input_bytes(day: u8) -> Vec<u8> {
 
 /// Convert an ascii decimal digit to its numeric value
 pub fn to_dec(byte: u8) -> u8 {
-    debug_assert!((b'0'..=b'9').contains(&byte));
+    debug_assert!(byte.is_ascii_digit());
     byte & 0b1111
 }
 
@@ -41,7 +41,7 @@ pub fn parse_dec<T: From<u8> + std::ops::Add<Output = T> + std::ops::Mul<Output 
     s: impl AsRef<[u8]>,
 ) -> T {
     s.as_ref()
-        .into_iter()
+        .iter()
         .fold(T::from(0), |acc, c| T::from(10) * acc + T::from(to_dec(*c)))
 }
 
