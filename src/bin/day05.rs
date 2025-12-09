@@ -13,12 +13,13 @@ fn main() {
         .map(aoc::parse_dec::<u64>)
         .collect::<Vec<_>>();
 
-    
     ranges.sort_unstable_by_key(|r| *r.start());
     let ranges = ranges;
     let mut union: Vec<RangeInclusive<u64>> = vec![];
     for r in ranges {
-        if let Some(u) = union.last_mut() && u.end() >= r.start() {
+        if let Some(u) = union.last_mut()
+            && u.end() >= r.start()
+        {
             *u = *u.start()..=*r.end().max(u.end());
         } else {
             union.push(r);
